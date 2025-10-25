@@ -1,0 +1,7 @@
+# Ignore Node development files
+node_modules/
+package-lock.json
+package.json
+server.js
+votes.json
+models/
