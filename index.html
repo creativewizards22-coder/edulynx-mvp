@@ -1,0 +1,401 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Edulynx | Future-Proofing Education Through Human Connection</title>
+
+  <!-- Tailwind for styling -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- PapaParse for CSV parsing -->
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+
+  <style>
+    :root{
+      --neon: #ff8800;
+      --bg: #0a0a0a;
+      --muted: #f3f3f3;
+      --glass: rgba(0,0,0,0.62);
+      --yes-green: #00ff66;
+      --no-red: #ff4d4d;
+      --gold: #ffd166;
+    }
+
+    html, body {
+      height:100%;
+      margin:0;
+      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background: var(--bg);
+      color: var(--muted);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Header / neon */
+    .neon-text { text-shadow: 0 0 10px var(--neon), 0 0 20px var(--neon), 0 0 30px #ff6600; }
+    .neon-border { border:2px solid var(--neon); box-shadow:0 0 20px var(--neon), inset 0 0 10px #ff6600; border-radius:12px; background: rgba(0,0,0,0.45); transition:0.2s; }
+    .neon-border:hover { box-shadow:0 0 34px #ffa500, inset 0 0 20px var(--neon); transform:translateY(-2px); }
+
+    /* Background layer */
+    #background-layer { position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden; }
+    .bg-emoji { position:absolute; opacity:0.3; filter: drop-shadow(0 2px 8px rgba(0,0,0,0.6)); font-size:28px; mix-blend-mode: screen; animation: bgFloat ease-in-out infinite; pointer-events:none; transform-origin:center; }
+    @keyframes bgFloat { 0% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-24px) rotate(6deg); } 100% { transform: translateY(0) rotate(0deg); } }
+    .particle { position:absolute; width:6px; height:6px; border-radius:50%; background: radial-gradient(circle,#ff8800 0%, transparent 70%); opacity:0.7; filter: blur(.6px); pointer-events:none; }
+
+    /* Layout */
+    .container { max-width:1100px; margin:0 auto; padding:28px; position:relative; z-index:1; }
+    header.sticky { position:sticky; top:0; z-index:6; backdrop-filter: blur(6px); }
+
+    /* Hero */
+    .hero-title { font-size:clamp(28px,5vw,56px); line-height:1.02; }
+    .hero-sub { color:#cfcfcf; }
+
+    /* Process boxes */
+    .process-box { margin-top:18px; padding:20px; border-radius:12px; background:var(--glass); border:2px solid var(--neon); box-shadow:0 0 20px var(--neon), inset 0 0 10px #ff6600; color:#eaeaea; }
+
+    /* Card / form */
+    .card { border-radius:12px; padding:18px; background: rgba(0,0,0,0.55); border:2px solid var(--neon); box-shadow:0 8px 30px rgba(0,0,0,0.6); }
+    .form-iframe { width:100%; min-height:760px; border-radius:12px; border:2px solid var(--neon); box-shadow:0 0 18px var(--neon), inset 0 0 10px #ff6600; }
+
+    /* Votes */
+    .votes-row { display:flex; gap:18px; justify-content:center; align-items:center; margin-top:18px; flex-wrap:wrap; }
+    .vote-card { min-width:220px; padding:18px 22px; border-radius:12px; text-align:center; font-weight:800; color:#fff; }
+    .vote-yes { background: linear-gradient(180deg, rgba(0,255,102,0.06) 0%, rgba(0,255,102,0.03) 100%); border: 2px solid rgba(0,255,102,0.95); box-shadow: 0 0 28px rgba(0,255,102,0.22), inset 0 0 12px rgba(0,255,102,0.06); color: #001f00; }
+    .vote-no { background: linear-gradient(180deg, rgba(255,77,77,0.06) 0%, rgba(255,77,77,0.03) 100%); border: 2px solid rgba(255,77,77,0.95); box-shadow: 0 0 28px rgba(255,77,77,0.20), inset 0 0 12px rgba(255,77,77,0.04); color:#3a0000; }
+    .vote-number { font-size:2.6rem; display:block; margin-top:12px; text-shadow: 0 3px 10px rgba(0,0,0,0.6); color:#fff; }
+    .vote-card .label { font-size:1.05rem; color:#fff; }
+    .glow-pulse { animation: pulseGlow 2.4s infinite ease-in-out; }
+    @keyframes pulseGlow { 0% { transform: translateY(0); } 50%{ transform: translateY(-3px); filter: drop-shadow(0 6px 18px rgba(255,200,120,0.06)); } 100%{ transform: translateY(0); } }
+    .thank { color: var(--gold); font-weight:800; text-align:center; margin-top:14px; opacity:0; transition:opacity .45s ease, transform .35s; transform: translateY(6px); }
+    .thank.show { opacity:1; transform: translateY(0); text-shadow: 0 0 24px rgba(255,209,102,0.35); }
+
+    /* Small form */
+    .small-input { padding:10px; border-radius:8px; border:1px solid rgba(255,255,255,0.06); width:100%; max-width:360px; display:block; margin:6px auto; background:#fff; color:#000; }
+    .small-select { padding:10px; border-radius:8px; border:1px solid rgba(255,255,255,0.06); width:100%; max-width:360px; display:block; margin:6px auto; background:#fff; color:#000; }
+    .vote-buttons { display:flex; gap:12px; justify-content:center; margin-top:10px; }
+
+    /* Investors */
+    .invest-box { padding:16px; border-radius:12px; background: rgba(0,0,0,0.55); border:2px solid var(--neon); box-shadow:0 0 20px var(--neon); text-align:center; }
+
+    /* Footer */
+    footer { color:#bdbdbd; text-align:center; padding:28px 12px; }
+
+    /* Responsive adjustments */
+    @media (max-width:720px){
+      .vote-card { min-width:150px; padding:12px; }
+      .form-iframe { min-height:700px; }
+      .vote-number { font-size:1.8rem; }
+    }
+
+  </style>
+</head>
+
+<body>
+
+<!-- BACKGROUND LAYER -->
+<div id="background-layer" aria-hidden="true">
+  <div id="particles" style="position:absolute; inset:0;"></div>
+  <div id="emoji-bg" style="position:absolute; inset:0;"></div>
+</div>
+
+<div class="container">
+
+  <!-- HEADER -->
+  <header class="sticky neon-border mb-6">
+    <div class="flex items-center justify-between py-3">
+      <!-- Logo -->
+      <div>
+        <a href="#"><img src="path-to-your-logo.png" alt="Edulynx Logo" class="h-10 sm:h-12"></a>
+      </div>
+      <nav class="hidden md:flex gap-6 text-gray-300 font-medium">
+        <a href="#" class="hover:text-orange-400">Home</a>
+        <a href="#how" class="hover:text-orange-400">How it Works</a>
+        <a href="#feedback" class="hover:text-orange-400">Feedback</a>
+        <a href="#investors" class="hover:text-orange-400">Investors</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <main>
+    <section class="text-center py-12">
+      <h2 class="hero-title font-extrabold neon-text">Future-Proofing Education<br><span class="hero-sub">Through human connection and verified tutors</span></h2>
+      <p class="text-gray-300 mt-5 mx-auto max-w-3xl">Edulynx connects verified university teaching students with school learners for safe, affordable and result-focused home tuition. Tutors gain career-building experience while families receive transparent, high-quality tuition tailored to each student.</p>
+
+      <div class="mt-8 flex flex-col sm:flex-row gap-6 justify-center items-center">
+        <a href="https://forms.gle/KbrA4Lk3G21humYp9" class="neon-border bg-black text-orange-400 font-bold py-3 px-8 rounded-lg text-lg uppercase tracking-wide hover:bg-gray-800">🎯 Find a Tutor</a>
+        <a href="https://forms.gle/jWymUQT1AsYHLSSp9" class="neon-border bg-orange-500 text-black font-bold py-3 px-8 rounded-lg text-lg uppercase tracking-wide hover:bg-orange-400">🚀 Become a Tutor</a>
+      </div>
+
+      <div class="card neon-border mt-8 mx-auto max-w-3xl text-left">
+        <h3 class="text-xl font-bold text-orange-400 mb-2">Why EduLynx exists — safety, trust & community</h3>
+        <p class="text-gray-200 leading-relaxed">
+          Recent reports show a worrying rise in incidents stemming from late-night tuition sessions and unverified external classes — from safety risks to discomfort and even violence.
+          EduLynx offers a better way: sessions held at the student's home or online with fully <strong>verified university tutors</strong>, the option to <strong>choose tutor gender</strong> and preferred <strong>language or cultural background</strong>, and strict safety checks so families can trust who they invite into their home.
+          We also reward families who help grow the community — <strong>referral bonuses</strong>, lower fees for group registrations, and flexible group discounts for siblings or friends. Choose safety, transparency, and real learning outcomes.
+        </p>
+        <p class="mt-3 text-gray-300 font-semibold">Because your child deserves more than a class — they deserve care, safety, and excellence.</p>
+      </div>
+
+      <!-- A–P Process -->
+      <div id="how" class="process-box mt-6 text-left">
+        <h3 class="text-xl font-bold text-orange-400 mb-3">📚 EduLynx Process (A–P)</h3>
+        <div style="color:#eaeaea; line-height:1.6;">
+          <strong>A — Register:</strong> Parents create a profile and set learning goals, preferred times, budgets and comfort choices (gender/language).<br>
+          <strong>B — Tutor Verification:</strong> Tutors sign up with university ID, references and optional background checks; Edulynx verifies credentials and identity.<br>
+          <strong>C — Matchmaking:</strong> Smart matching suggests tutors by subject, level, location and family preferences; view verified profiles with short intro videos and ratings.<br>
+          <strong>D — Book & Confirm:</strong> Transparent pricing, session length and cancellation terms. Book with a few clicks and receive reminders.<br>
+          <strong>E — Safe Session Delivery:</strong> Sessions take place at home or online. Parents can observe remotely or attend for extra reassurance.<br>
+          <strong>F — After-Session Notes:</strong> Tutors upload a short summary, homework and progress pointers to the parent's dashboard after each session.<br>
+          <strong>G — Feedback Loop:</strong> Parents rate and comment; top tutors rise, concerns are flagged for review and action.<br>
+          <strong>H — Personalised Learning Plan:</strong> Tutors and parents co-create a clear plan with milestones, short assessments and resources.<br>
+          <strong>I — Safety & Support:</strong> ID verification, in-platform messaging, emergency contacts and optional background checks support family safety preferences.<br>
+          <strong>J — Affordable & Fair:</strong> Community pricing, group discounts, sibling bundles and referral rewards keep tuition affordable and sustainable.<br>
+          <strong>K — Tutor Growth:</strong> Tutors receive training, mentoring and verified references, improving teaching quality across the network.<br>
+          <strong>L — Progress Dashboards:</strong> Parents monitor attendance, improvement trends and next-step recommendations in a simple dashboard.<br>
+          <strong>M — Community Rewards:</strong> Refer a friend and both get discounts; group registrations unlock lower rates and priority scheduling.<br>
+          <strong>N — Choice & Comfort:</strong> Families can filter tutors by gender, language, and cultural background to ensure comfortable matches.<br>
+          <strong>O — Transparent Safety Records:</strong> Profiles show verification badges, session history and review summaries for peace of mind.<br>
+          <strong>P — Celebrate & Scale:</strong> Milestones, badges and certificates encourage learners and create shareable progress moments.
+        </div>
+
+        <p style="margin-top:10px; color:#dcdcdc;">
+          <strong>Value for parents & students:</strong> Verified tutors, in-home or online lessons with clear notes and measurable progress — this is safer, more personal, and more effective than late-night tuition runs.
+        </p>
+      </div>
+
+      <!-- FEEDBACK / MVP FORM -->
+      <section id="feedback" class="py-8">
+        <div class="card neon-border">
+          <h3 class="text-2xl font-bold text-orange-400 mb-3">💡 Early MVP Feedback</h3>
+          <p class="text-yellow-300 font-semibold mb-4">
+            ⚠️ Important: This platform is currently in the <strong>MVP feedback stage</strong>. No official classes are registered yet, and <strong>payments should not be made</strong>. This section is for feedback purposes only.
+          </p>
+          <p class="text-gray-300 mb-4">Submit your vote & feedback using the form below. Yes/No results update live from our Google Sheet (CSV) — or use the local form to send feedback directly to this server.</p>
+
+          <div style="max-width:920px;margin:0 auto; margin-bottom:18px;">
+            <!-- Keep the Google Form iframe for external submissions if you want -->
+            <iframe class="form-iframe" src="https://docs.google.com/forms/d/e/1FAIpQLSfutv58QCHg3_nbYkPnRGJ6L4Tfb3z71TAhGMscVtBgKQRC5Q/viewform?embedded=true" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>
+          </div>
+
+          <!-- LOCAL VOTING FORM (posts to your backend at /vote) -->
+          <div style="max-width:920px;margin:0 auto;" class="text-center">
+            <form id="voteFormLocal" onsubmit="return false;" class="mx-auto">
+              <input id="v-name" class="small-input" placeholder="Your name (required)" required />
+              <select id="v-state" class="small-select" required>
+                <option value="">Select state (required)</option>
+                <option>Selangor</option>
+                <option>Kuala Lumpur</option>
+                <option>Other</option>
+              </select>
+
+              <div class="vote-buttons">
+                <button type="button" onclick="submitVote('Yes')" class="neon-border vote-card vote-yes" style="min-width:140px;">👍 Yes</button>
+                <button type="button" onclick="submitVote('No')" class="neon-border vote-card vote-no" style="min-width:140px;">👎 No</button>
+              </div>
+            </form>
+            <div id="local-response" style="margin-top:12px;color:var(--gold);font-weight:700;"></div>
+          </div>
+
+          <div class="votes-row" role="status" aria-live="polite" style="margin-top:18px;">
+            <div class="vote-card vote-yes glow-pulse" aria-atomic="true" title="Yes votes">
+              <div class="label">👍 Yes</div>
+              <span id="yes-count" class="vote-number">0</span>
+            </div>
+            <div class="vote-card vote-no glow-pulse" aria-atomic="true" title="No votes">
+              <div class="label">👎 No</div>
+              <span id="no-count" class="vote-number">0</span>
+            </div>
+          </div>
+
+          <div id="thank" class="thank">✨ Thanks for submitting your feedback! Your input helps improve EduLynx. ✨</div>
+        </div>
+      </section>
+
+      <!-- INVESTORS -->
+      <section id="investors" class="py-8">
+        <div class="invest-box neon-border">
+          <h3 class="text-2xl font-bold text-orange-400 mb-2">🚀 Interested in Investing?</h3>
+          <p class="text-gray-300 mb-4">Join our mission to make quality, local tutoring affordable and safe for families across Malaysia. Be part of the future of learning — scalable, trusted and human-first. Early investors gain priority access to pilot regions and product roadmap briefings.</p>
+          <a class="px-5 py-2 bg-orange-500 text-black rounded-lg font-bold neon-border" href="https://forms.gle/XEFdoA2vFLvXnbE17" target="_blank">💼 Register Interest</a>
+        </div>
+      </section>
+
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Edulynx Systems. Together, we’re redefining how learning connects hearts and minds. | <a href="#" class="text-orange-400">Privacy Policy</a></p>
+    <p class="text-gray-400 mt-2">A part of <strong>Creative Wizard Marketing (CWM)</strong></p>
+  </footer>
+
+</div>
+
+<!-- BACKGROUND PARTICLES + EMOJIS -->
+<script>
+  (function makeParticles(){
+    const container=document.getElementById('particles'); if(!container)return;
+    const count=36;
+    for(let i=0;i<count;i++){
+      const d=document.createElement('div'); d.className='particle';
+      d.style.left=(Math.random()*100)+'%';
+      d.style.top=(Math.random()*100)+'%';
+      const size=(4+Math.random()*8); d.style.width=size+'px'; d.style.height=size+'px';
+      d.style.opacity=(0.25+Math.random()*0.6).toString();
+      d.style.animationDuration=(10+Math.random()*14)+'s';
+      container.appendChild(d);
+    }
+  })();
+
+  (function makeBgEmojis(){
+    const econt=document.getElementById('emoji-bg'); if(!econt)return;
+    const set=['📚','🧑‍🏫','👩‍🎓','📖','💡','🌐','✏️','🎓'];
+    const total=24;
+    for(let i=0;i<total;i++){
+      const el=document.createElement('div'); el.className='bg-emoji';
+      el.textContent=set[Math.floor(Math.random()*set.length)];
+      el.style.left=(3+Math.random()*94)+'%'; el.style.top=(2+Math.random()*96)+'%';
+      el.style.fontSize=(18+Math.random()*48)+'px';
+      el.style.opacity=(0.18+Math.random()*0.35).toString();
+      el.style.animationDelay=(Math.random()*6)+'s';
+      el.style.animationDuration=(6+Math.random()*10)+'s';
+      el.style.transform='rotate('+(Math.random()*30-15)+'deg)';
+      econt.appendChild(el);
+    }
+  })();
+
+  // CSV votes (existing)
+  const csvUrl="https://docs.google.com/spreadsheets/d/e/2PACX-1vR_ySlv_1W4ouaSNQ6zvd33dgOxwke4k2KXClM2JX1LxjEZCVH72mLdQWha3-dEkZnVgnn5rk2UJG1X/pub?output=csv";
+  const yesEl=document.getElementById('yes-count');
+  const noEl=document.getElementById('no-count');
+  const thankEl=document.getElementById('thank');
+  let prevYes=-1, prevNo=-1;
+
+  function parseAndCount(rows){
+    if(!rows||rows.length===0)return {yes:0,no:0};
+    let voteCol=5;
+    const header=rows[0].map(c=>(''+c).toLowerCase().trim());
+    for(let i=0;i<header.length;i++){
+      const h=header[i];
+      if(h.includes('vote')||h.includes('would')||h.includes('yes')||h.includes('no')||h.includes('response')||h.includes('feedback')){
+        voteCol=i; break;
+      }
+    }
+    let startIndex=1;
+    const headerLooksLikeData=header.some(v=>v==='yes'||v==='no'||/^[0-9]/.test(v));
+    if(headerLooksLikeData)startIndex=0;
+
+    let yes=0,no=0;
+    for(let r=startIndex;r<rows.length;r++){
+      const cols=rows[r];
+      const raw=(cols[voteCol]||'').toString().trim().toLowerCase();
+      if(raw==='yes') yes++;
+      else if(raw==='no') no++;
+      else{ for(let c=0;c<cols.length;c++){ const v=(cols[c]||'').toString().trim().toLowerCase(); if(v==='yes'){yes++;break;} if(v==='no'){no++;break;} } }
+    }
+    return {yes,no};
+  }
+
+  function fetchVotes(){
+    try{
+      Papa.parse(csvUrl,{
+        download:true,
+        skipEmptyLines:true,
+        complete:function(results){
+          const rows=results.data||[]; const counts=parseAndCount(rows);
+          // Only update counts visually if csv fetch is successful
+          yesEl.textContent=counts.yes;
+          noEl.textContent=counts.no;
+
+          if(prevYes>=0&&prevNo>=0){
+            if(counts.yes>prevYes||counts.no>prevNo){
+              thankEl.classList.add('show');
+              clearTimeout(window._thankTimer);
+              window._thankTimer=setTimeout(()=>{thankEl.classList.remove('show');},3200);
+            }
+          }
+          prevYes=counts.yes; prevNo=counts.no;
+        },
+        error:function(err){console.error('CSV parse error',err);}
+      });
+    }catch(e){console.error('fetchVotes error',e);}
+  }
+
+  fetchVotes();
+  setInterval(fetchVotes,10000);
+
+  // --- LOCAL FORM SUBMISSION to backend (/vote) ---
+  async function submitVote(choice){
+    const name = (document.getElementById('v-name')||{}).value || '';
+    const state = (document.getElementById('v-state')||{}).value || '';
+
+    if(!name || !state){
+      const respEl=document.getElementById('local-response');
+      respEl.textContent='Please fill your name and select state.';
+      respEl.style.color='orange';
+      setTimeout(()=>{ respEl.textContent=''; }, 3000);
+      return;
+    }
+
+    const payload = { name, state, vote: choice };
+
+    try {
+      // Use relative path so it works when served from your Node server
+      const res = await fetch('/vote', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+
+      // expecting backend to respond with JSON like { success:true, counts: { yes: X, no: Y } }
+      if(res.ok){
+        const data = await res.json();
+        // show success message
+        const respEl=document.getElementById('local-response');
+        respEl.textContent = '✅ Thank you — your vote was recorded.';
+        respEl.style.color = 'var(--gold)';
+        setTimeout(()=>{ respEl.textContent=''; }, 3200);
+
+        // show animated thank you
+        thankEl.classList.add('show');
+        clearTimeout(window._thankTimer);
+        window._thankTimer=setTimeout(()=>{thankEl.classList.remove('show');},3200);
+
+        // If backend returned updated counts, use them; otherwise increment locally:
+        if(data && data.counts){
+          yesEl.textContent = data.counts.yes;
+          noEl.textContent = data.counts.no;
+        } else {
+          // fallback: increment local visible counters if vote was Yes/No
+          try {
+            let y = parseInt(yesEl.textContent||'0',10);
+            let n = parseInt(noEl.textContent||'0',10);
+            if(choice.toLowerCase()==='yes') y++;
+            else if(choice.toLowerCase()==='no') n++;
+            yesEl.textContent = y;
+            noEl.textContent = n;
+          } catch(e){}
+        }
+
+        // reset local form
+        document.getElementById('voteFormLocal').reset();
+      } else {
+        const txt = await res.text().catch(()=>null);
+        console.error('Server error', res.status, txt);
+        const respEl=document.getElementById('local-response');
+        respEl.textContent='⚠️ Server error — try again later.';
+        respEl.style.color='tomato';
+        setTimeout(()=>{ respEl.textContent=''; }, 3000);
+      }
+    } catch(err){
+      console.error('SubmitVote error', err);
+      const respEl=document.getElementById('local-response');
+      respEl.textContent='🚫 Could not reach server. Is it running?';
+      respEl.style.color='tomato';
+      setTimeout(()=>{ respEl.textContent=''; }, 3500);
+    }
+  }
+</script>
+
+</body>
+</html>
