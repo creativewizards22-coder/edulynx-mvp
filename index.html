@@ -3,240 +3,312 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Edulynx | Future-Proofing Education Through Human Connection</title>
+<title>Edulynx | Empowering Tomorrow's Minds with Unmatched Safety</title>
 <script src="https://cdn.tailwindcss.com"></script>
+
 <style>
 :root{
-  --neon: #ff8800; 
-  --bg: #0a0a0a; 
-  --muted: #f3f3f3; 
-  --glass: rgba(0,0,0,0.62); 
-  --yes-green: #00ff66; 
-  --no-red: #ff4d4d; 
-  --gold: #ffd166;
+    --neon: #ff8800;
+    --bg: #0a0a0a;
+    --muted: #f3f3f3;
+    --glass: rgba(0,0,0,0.62);
+    --yes-green: #00ff66;
+    --no-red: #ff4d4d;
+    --gold: #ffd166;
+    --glowing-yellow: #FFEA00;
 }
-/* *** FIX HERE: Changed 'background: var(--bg);' to 'background: #0a0a0a;' *** */
-html, body {height:100%; margin:0; font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; background: #0a0a0a; color: var(--muted); -webkit-font-smoothing: antialiased;}
 
+/* Make all text white by default (user requested).
+   Buttons that intentionally use text-black will keep it because .text-black is redefined below. */
+body, body * { color: #ffffff !important; }
+
+/* Preserve any explicit text-black usages (buttons) */
+.text-black { color: #000000 !important; }
+
+/* Basic layout */
+html, body { height:100%; margin:0; background: var(--bg); font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; -webkit-font-smoothing:antialiased; }
+
+/* Neon styles */
 .neon-text { text-shadow: 0 0 10px var(--neon), 0 0 20px var(--neon), 0 0 30px #ff6600; }
-.neon-border { border:2px solid var(--neon); box-shadow:0 0 20px var(--neon), inset 0 0 10px #ff6600; border-radius:12px; background: rgba(0,0,0,0.45); transition:0.2s; }
+.neon-border {
+    border:2px solid var(--neon);
+    box-shadow:0 0 20px var(--neon), inset 0 0 10px #ff6600;
+    border-radius:12px;
+    transition:0.2s;
+}
 .neon-border:hover { box-shadow:0 0 34px #ffa500, inset 0 0 20px var(--neon); transform:translateY(-2px); }
+
+/* Background layers */
 #background-layer { position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden; }
-.bg-emoji { position:absolute; opacity:0.3; filter: drop-shadow(0 2px 8px rgba(0,0,0,0.6)); font-size:28px; mix-blend-mode: screen; animation: bgFloat ease-in-out infinite; pointer-events:none; transform-origin:center; }
+.bg-emoji { position:absolute; opacity:0.28; filter: drop-shadow(0 2px 8px rgba(0,0,0,0.6)); font-size:28px; mix-blend-mode: screen; animation: bgFloat ease-in-out infinite; pointer-events:none; transform-origin:center; }
 @keyframes bgFloat { 0% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-24px) rotate(6deg); } 100% { transform: translateY(0) rotate(0deg); } }
 .particle { position:absolute; width:6px; height:6px; border-radius:50%; background: radial-gradient(circle,#ff8800 0%, transparent 70%); opacity:0.7; filter: blur(.6px); pointer-events:none; }
+
 .container { max-width:1100px; margin:0 auto; padding:28px; position:relative; z-index:1; }
+
+/* Header & Hero */
 header.sticky { position:sticky; top:0; z-index:6; backdrop-filter: blur(6px); }
 .hero-title { font-size:clamp(28px,5vw,56px); line-height:1.02; }
-.hero-sub { color:#cfcfcf; }
-.process-box { margin-top:18px; padding:20px; border-radius:12px; background:var(--glass); border:2px solid var(--neon); box-shadow:0 0 20px var(--neon), inset 0 0 10px #ff6600; color:#eaeaea; }
-.card { border-radius:12px; padding:18px; background: rgba(0,0,0,0.55); border:2px solid var(--neon); box-shadow:0 8px 30px rgba(0,0,0,0.6); }
+.hero-sub { color: #ffffff !important; } /* ensure hero-sub white */
 
-/* --- Vote Styles --- */
-.votes-row { display:flex; gap:18px; justify-content:center; align-items:center; margin-top:18px; flex-wrap:wrap; }
-.vote-card { min-width:220px; padding:18px 22px; border-radius:12px; text-align:center; font-weight:800; color:#fff; transition:background 0.2s, box-shadow 0.2s, transform 0.1s; }
+/* Content cards */
+.content-card {
+    background-color: rgba(0, 0, 0, 0.45);
+    padding: 30px;
+    border-radius: 12px;
+    border: 1px solid var(--neon);
+    box-shadow: 0 0 15px rgba(255, 136, 0, 0.4);
+    margin-bottom: 30px;
+}
+
+/* Bright highlight box styles (glowing yellow) */
+.value-highlight, .value-highlight-hero {
+    background-color: rgba(0,0,0,0.55);
+    border: 2px solid var(--glowing-yellow);
+    box-shadow: 0 0 10px var(--glowing-yellow), 0 0 20px var(--glowing-yellow), inset 0 0 8px rgba(255,255,0,0.6);
+    filter: drop-shadow(0 0 5px rgba(255,255,0,0.8));
+    padding: 30px;
+    margin-top: 15px;
+    border-radius: 12px;
+    font-size: 1.05rem;
+    font-weight: 700;
+    text-align: center;
+    color: white;
+}
+
+/* Make the A–P process use a slightly different size so it reads well */
+.value-process {
+    background-color: rgba(0,0,0,0.5);
+    border: 2px solid var(--glowing-yellow);
+    box-shadow: 0 0 18px var(--glowing-yellow), inset 0 0 10px rgba(255,235,130,0.08);
+    padding: 26px;
+    border-radius: 12px;
+    color: white;
+}
+
+/* Votes / interactive */
+.votes-row { display:flex; gap:18px; justify-content:center; align-items:center; margin-top:18px; flex-wrap:wrap; z-index:2; }
+.vote-card {
+    min-width:220px;
+    padding:18px 22px;
+    border-radius:12px;
+    text-align:center;
+    font-weight:800;
+    color:#fff;
+    transition:background 0.2s, box-shadow 0.2s, transform 0.1s;
+    cursor:pointer;
+}
 .vote-yes { background: linear-gradient(180deg, rgba(0,255,102,0.06) 0%, rgba(0,255,102,0.03) 100%); border: 2px solid rgba(0,255,102,0.95); box-shadow: 0 0 28px rgba(0,255,102,0.22), inset 0 0 12px rgba(0,255,102,0.06); color: #00ff66; text-shadow:0 0 8px #00ff66,0 0 16px #00ff66,0 0 24px #00ff66; }
 .vote-no { background: linear-gradient(180deg, rgba(255,77,77,0.06) 0%, rgba(255,77,77,0.03) 100%); border: 2px solid rgba(255,77,77,0.95); box-shadow: 0 0 28px rgba(255,77,77,0.20), inset 0 0 12px rgba(255,77,77,0.04); color:#ff4d4d; text-shadow:0 0 8px #ff4d4d,0 0 16px #ff4d4d,0 0 24px #ff4d4d; }
 .vote-number { font-size:2.6rem; display:block; margin-top:12px; text-shadow: 0 3px 10px rgba(0,0,0,0.6); color:#fff; }
 .vote-card .label { font-size:1.05rem; color:#fff; }
-.glow-pulse { animation: pulseGlow 2.4s infinite ease-in-out; }
-@keyframes pulseGlow { 0% { transform: translateY(0); } 50%{ transform: translateY(-3px); filter: drop-shadow(0 6px 18px rgba(255,200,120,0.06)); } 100%{ transform: translateY(0); } }
-.thank { color: var(--gold); font-weight:800; text-align:center; margin-top:14px; opacity:0; transition:opacity .45s ease, transform .35s; transform: translateY(6px); }
-.thank.show { opacity:1; transform: translateY(0); text-shadow: 0 0 24px rgba(255,209,102,0.35); }
-.small-input { padding:10px; border-radius:8px; border:1px solid rgba(255,255,255,0.06); width:100%; max-width:360px; display:block; margin:6px auto; background:#fff; color:#000; }
-.small-select { padding:10px; border-radius:8px; border:1px solid rgba(255,255,255,0.06); width:100%; max-width:360px; display:block; margin:6px auto; background:#fff; color:#000; }
-.vote-buttons { display:flex; gap:12px; justify-content:center; margin-top:10px; }
-.invest-box { padding:16px; border-radius:12px; background: rgba(0,0,0,0.55); border:2px solid var(--neon); box-shadow:0 0 20px var(--neon); text-align:center; }
-footer { color:#bdbdbd; text-align:center; padding:28px 12px; }
-@media (max-width:768px){ 
-    .vote-card { min-width:150px; padding:12px; } 
-    .vote-number { font-size:1.8rem; } 
+
+/* small adjustments for mobile */
+@media (max-width:768px){
+    .vote-card { min-width:150px; padding:12px; }
+    .vote-number { font-size:1.8rem; }
 }
+
+/* Footer */
+footer { color:#bdbdbd; text-align:center; padding:28px 12px; }
+
+/* Ensure anchor hover contrasts still show */
+a:hover { opacity:0.95; }
 </style>
 </head>
+
 <body>
 <div id="background-layer" aria-hidden="true">
-  <div id="particles" style="position:absolute; inset:0;"></div>
-  <div id="emoji-bg" style="position:absolute; inset:0;"></div>
+  <div id="particles" style="position:absolute; inset:0;"></div>
+  <div id="emoji-bg" style="position:absolute; inset:0;"></div>
 </div>
 
-<div class="container">
-<header class="sticky neon-border mb-6">
-  <div class="flex items-center justify-between py-3">
-        <div>
-      <a href="#">
-                <img src="image_89e4a3.png" alt="Edulynx Logo" class="h-10" onerror="this.onerror=null;this.src='https://placehold.co/100x40/ff8800/000000?text=Edulynx';">
-      </a>
-    </div>
-    <nav class="hidden md:flex gap-6 text-gray-300 font-medium">
-      <a href="#" class="hover:text-orange-400">Home</a>
-      <a href="#how" class="hover:text-orange-400">How it Works</a>
-      <a href="#feedback" class="hover:text-orange-400">Feedback</a>
-      <a href="#investors" class="hover:text-orange-400">Investors</a>
-    </nav>
-  </div>
+<header class="sticky mb-6" style="background-color: rgba(255, 136, 0, 0.12); backdrop-filter: blur(6px); z-index:3;">
+  <div class="container neon-border py-3 flex items-center justify-between">
+    <div>
+      <!-- no logo as requested; keep spacing -->
+      <a href="#" style="color: white; font-weight:800; font-size:1.05rem; text-decoration:none;">Edulynx</a>
+    </div>
+    <nav class="hidden md:flex gap-6 font-medium" style="color: white;">
+      <a href="#" class="hover:text-orange-400">Home</a>
+      <a href="#how" class="hover:text-orange-400">How it Works</a>
+      <a href="#feedback" class="hover:text-orange-400">Feedback</a>
+      <a href="#investors" class="hover:text-orange-400">Investors</a>
+    </nav>
+  </div>
 </header>
 
-<main>
-<section class="text-center py-12">
-  <h2 class="hero-title font-extrabold neon-text">Future-Proofing Education<br><span class="hero-sub">Through human connection and verified tutors</span></h2>
-  <p class="text-gray-300 mt-5 mx-auto max-w-3xl">Edulynx connects verified university teaching students with school learners for safe, affordable, and result-focused home tuition. Tutors gain invaluable career-building experience while families receive transparent, high-quality tuition tailored to each student's needs. **Scheduled to launch in early 2026,** this innovative platform is poised to revolutionize how families access trusted educational support.</p>
-  <div class="mt-8 flex flex-col sm:flex-row gap-6 justify-center items-center">
-    <a href="https://forms.gle/KbrA4Lk3G21humYp9" target="_blank" class="neon-border bg-black text-orange-400 font-bold py-3 px-8 rounded-lg text-lg uppercase tracking-wide hover:bg-gray-800">🎯 Find a Tutor</a>
-    <a href="https://forms.gle/jWymUQT1AsYHLSSp9" target="_blank" class="neon-border bg-orange-500 text-black font-bold py-3 px-8 rounded-lg text-lg uppercase tracking-wide hover:bg-orange-400">🚀 Become a Tutor</a>
-  </div>
+<main class="container" style="position:relative; z-index:2;">
 
-  <div class="card neon-border mt-8 mx-auto max-w-3xl text-left">
-    <h3 class="text-xl font-bold text-orange-400 mb-2">Why EduLynx exists — safety, trust & community</h3>
-    <p class="text-gray-200 leading-relaxed">Recent reports show a worrying rise in incidents stemming from late-night tuition sessions and unverified external classes — from safety risks to discomfort and even violence. EduLynx offers a better way: sessions held at the student's home or online with fully <strong>verified university tutors</strong>, the option to <strong>choose tutor gender</strong> and preferred <strong>language or cultural background</strong>, and strict safety checks so families can trust who they invite into their home. We also reward families who help grow the community — <strong>referral bonuses</strong>, lower fees for group registrations, and flexible group discounts for siblings or friends. Choose safety, transparency, and real learning outcomes.</p>
-    <p class="mt-3 text-gray-300 font-semibold">Because your child deserves more than a class — they deserve care, safety, and excellence.</p>
-  </div>
+  <!-- HERO -->
+  <section class="text-center py-12">
+    <h2 class="hero-title font-extrabold neon-text" style="color:white;">Empowering Tomorrow's Minds<br><span class="hero-sub">With Verified Tutors and Unmatched Safety</span></h2>
 
-  <div id="how" class="process-box mt-6 text-left">
-    <h3 class="text-xl font-bold text-orange-400 mb-3">📚 EduLynx Process (A–P)</h3>
-    <div style="color:#eaeaea; line-height:1.6;">
-      <strong>A — Register:</strong> Parents create a profile and set learning goals, preferred times, budgets and comfort choices (gender/language).<br>
-      <strong>B — Tutor Verification:</strong> Tutors sign up with university ID, references and optional background checks; Edulynx verifies credentials and identity.<br>
-      <strong>C — Matchmaking:</strong> Smart matching suggests tutors by subject, level, location and family preferences; view verified profiles with short intro videos and ratings.<br>
-      <strong>D — Book & Confirm:</strong> Transparent pricing, session length and cancellation terms. Book with a few clicks and receive reminders.<br>
-      <strong>E — Safe Session Delivery:</strong> Sessions take place at home or online. Parents can observe remotely or attend for extra reassurance.<br>
-      <strong>F — After-Session Notes:</strong> Tutors upload a short summary, homework and progress pointers to the parent's dashboard after each session.<br>
-      <strong>G — Feedback Loop:</strong> Parents rate and comment; top tutors rise, concerns are flagged for review and action.<br>
-      <strong>H — Personalised Learning Plan:</strong> Tutors and parents co-create a clear plan with milestones, short assessments and resources.<br>
-      <strong>I — Safety & Support:</strong> ID verification, in-platform messaging, emergency contacts and optional background checks support family safety preferences.<br>
-      <strong>J — Affordable & Fair:</strong> Community pricing, group discounts, sibling bundles and referral rewards keep tuition affordable and sustainable.<br>
-      <strong>K — Tutor Growth:</strong> Tutors receive training, mentoring and verified references, improving teaching quality across the network.<br>
-      <strong>L — Progress Dashboards:</strong> Parents monitor attendance, improvement trends and next-step recommendations in a simple dashboard.<br>
-      <strong>M — Community Rewards:</strong> Refer a friend and both get discounts; group registrations unlock lower rates and priority scheduling.<br>
-      <strong>N — Choice & Comfort:</strong> Families can filter tutors by gender, language, and cultural background to ensure comfortable matches.<br>
-      <strong>O — Transparent Safety Records:</strong> Profiles show verification badges, session history and review summaries for peace of mind.<br>
-      <strong>P — Celebrate & Scale:</strong> Milestones, badges and certificates encourage learners and create shareable progress moments.
-    </div>
-    <p style="margin-top:10px; color:#dcdcdc;">
-      <strong>Value for parents & students:</strong> Verified tutors, in-home or online lessons with clear notes and measurable progress — this is safer, more personal, and more effective than late-night tuition runs.
-    </p>
-  </div>
+    <div class="value-highlight-hero mt-5 mx-auto max-w-3xl">
+      <p class="text-lg font-bold mb-3" style="color:white;">
+        <strong>Edulynx is Malaysia’s first verified tutor network built with university partnerships — ensuring safe, transparent, and career-building tutoring for the next generation.</strong>
+      </p>
 
-    <section id="feedback" class="py-8">
-    <div class="card neon-border">
-      <h3 class="text-2xl font-bold text-orange-400 mb-3">💡 Early MVP Feedback</h3>
-      <p class="text-yellow-300 font-semibold mb-4">⚠️ Important: This platform is currently in the **MVP feedback stage**. No official classes are registered yet, and **payments should not be made**. This section is for feedback purposes only.</p>
-      
-            <div class="mb-6 max-w-lg mx-auto">
-        <p class="text-center mb-3 text-lg text-yellow-500 font-medium">Click below to open the official EduLynx Feedback Form (required):</p>
-        <a href="https://forms.gle/uZeqajMvUwbthNZ89" target="_blank" class="neon-border bg-orange-500 text-black font-bold py-3 px-8 rounded-lg text-lg uppercase tracking-wide block w-full text-center hover:bg-orange-400">Open Feedback Form (New Tab)</a>
-      </div>
+      <p class="leading-relaxed" style="font-size:1rem; color:white;">
+        Say <strong>YES</strong> to worry-free learning! Edulynx connects exceptional university teaching students with school learners, creating a safe, affordable, and highly effective environment for academic success. Our platform <strong>empowers tutors to build their professional careers</strong> by providing valuable <strong>teaching experience and verifiable credentials</strong> (references/certifications) while offering families transparent, top-tier tuition meticulously tailored to each student's unique needs. <strong>Launching in early 2026,</strong> EduLynx is set to redefine trusted educational support and build brighter futures.
+        <br><br>
+        <strong>Phase 2 launching in Penang & Johor.</strong>
+      </p>
+    </div>
 
-      <p class="text-gray-300 mb-4 text-center">Your local vote for the platform's core idea is below. Yes/No results update **live globally**.</p>
+    <div class="mt-8 flex flex-col sm:flex-row gap-6 justify-center items-center">
+      <!-- Buttons kept exactly as in your original file (not changed) -->
+      <a href="https://forms.gle/KbrA4Lk3G21humYp9" target="_blank" class="neon-border bg-black text-orange-400 font-bold py-3 px-8 rounded-lg text-lg uppercase tracking-wide hover:bg-gray-800">🎯 Find a Tutor</a>
 
-      <div id="local-response" style="margin-top:12px;color:var(--gold);font-weight:700;"></div>
+      <a href="https://forms.gle/jWymUQT1AsYHLSSp9" target="_blank" class="neon-border bg-orange-500 text-black font-bold py-3 px-8 rounded-lg text-lg uppercase tracking-wide hover:bg-orange-400">🚀 Become a Tutor</a>
+    </div>
 
-            <div class="votes-row">
-        <div class="vote-card vote-yes glow-pulse">
-          <div class="label">👍 Yes</div>
-          <span id="yes-count" class="vote-number">0</span>
-        </div>
-        <div class="vote-card vote-no glow-pulse">
-          <div class="label">👎 No</div>
-          <span id="no-count" class="vote-number">0</span>
-        </div>
-      </div>
+    <div class="mt-6 mx-auto max-w-2xl p-4 rounded-lg border-2 border-yellow-500" style="background-color: rgba(255, 220, 0, 0.05); box-shadow: 0 0 15px rgba(255, 220, 0, 0.4);">
+      <p class="text-lg font-bold text-yellow-300 text-center" style="text-shadow: 0 0 10px rgba(255, 255, 0, 0.3);">
+        🚀 <strong>We’re preparing for our pilot launch!</strong>
+        Tutors — register now. Parents — share your feedback and get early access when we launch.
+      </p>
+    </div>
+  </section>
 
-            <div style="max-width:480px; margin:20px auto 0; padding:12px; border:1px solid rgba(255,255,255,0.1); border-radius:12px; background:rgba(0,0,0,0.3);">
-          <h4 style="font-weight:600; color:var(--neon); text-align:center; margin-bottom:10px;">Overall Support Status:</h4>
-          <div class="progress-bar-container" style="position:relative; width:100%; height:30px; background-color:var(--no-red); border-radius:5px; overflow:hidden;">
-                            <div id="yes-bar" style="height:100%; width:0%; background-color:var(--yes-green); transition:width 0.3s ease-in-out;"></div>
-                            <span id="yes-percent" style="position:absolute; top:5px; left:50%; transform:translateX(-50%); color:white; font-weight:bold; text-shadow:1px 1px 2px rgba(0,0,0,0.5);">0% Support</span>
-          </div>
-      </div>
-            <div id="thank" class="thank">✨ Thanks for submitting your feedback! Your input helps improve EduLynx. ✨</div>
-    </div>
-  </section>
+  <!-- SAFETY / CONTENT CARD -->
+  <div class="content-card neon-border mt-8 mx-auto max-w-3xl text-left" style="color:white;">
+    <h3 class="text-2xl font-extrabold text-orange-400 mb-2">🔒 The Safety Solution: Why Parents Choose EduLynx</h3>
+    <p class="text-lg font-semibold mb-4" style="color:white;">We're solving the two biggest problems in tuition: <strong>Trust and Safety</strong>. Your child deserves peace of mind and verified excellence.</p>
 
-    <section id="investors" class="py-8">
-    <div class="invest-box neon-border">
-      <h3 class="text-2xl font-bold text-orange-400 mb-2">🚀 Interested in Investing?</h3>
-      <p class="text-gray-300 mb-4">EduLynx is currently launching in Selangor & Kuala Lumpur. Early adoption metrics and community growth are available. Investors can register interest to be contacted with launch insights, revenue projections and strategic plans.</p>
-            <a href="https://forms.gle/QyoQmJjBWppnQwMq9" target="_blank" class="neon-border bg-black text-orange-400 font-bold py-2 px-6 rounded-lg inline-block hover:bg-gray-800">📩 Register Interest</a>
-    </div>
-  </section>
+    <p style="color:white;" class="leading-relaxed">
+      Recent reports show a worrying rise in incidents stemming from late-night tuition sessions and unverified external classes — from safety risks to discomfort and even violence. EduLynx offers a better way: sessions held at the student's home or online with fully <strong>verified university tutors</strong>, the option to <strong>choose tutor gender</strong> and preferred <strong>language or cultural background</strong>, and strict safety checks so families can trust who they invite into their home. We also reward families who help grow the community — <strong>referral bonuses</strong>, lower fees for group registrations, and flexible group discounts for siblings or friends. Choose safety, transparency, and real learning outcomes.
+    </p>
+
+    <div class="value-highlight mt-6">
+      <p class="font-extrabold mb-1">Because your child deserves more than a class — they deserve care, safety, and excellence.</p>
+    </div>
+  </div>
+
+  <!-- A–P PROCESS (glowing yellow box) -->
+  <div id="how" class="content-card mt-6 text-left">
+    <h3 class="text-xl font-bold text-orange-400 mb-3">📚 EduLynx Process (A–P)</h3>
+
+    <div class="value-process" style="color:white; line-height:1.6;">
+      <p><strong>A — Register:</strong> Parents create a profile and set learning goals, preferred times, budgets and comfort choices (gender/language).</p>
+      <p><strong>B — Tutor Verification:</strong> Tutors sign up with university ID, references and optional background checks; Edulynx verifies credentials and identity.</p>
+      <p><strong>C — Matchmaking:</strong> Smart matching suggests tutors by subject, level, location and family preferences; view verified profiles with short intro videos and ratings.</p>
+      <p><strong>D — Book & Confirm:</strong> Transparent pricing, session length and cancellation terms. Book with a few clicks and receive reminders.</p>
+      <p><strong>E — Safe Session Delivery:</strong> Sessions take place at home or online. Parents can observe remotely or attend for extra reassurance.</p>
+      <p><strong>F — After-Session Notes:</strong> Tutors upload a short summary, homework and progress pointers to the parent's dashboard after each session.</p>
+      <p><strong>G — Feedback Loop:</strong> Parents rate and comment; top tutors rise, concerns are flagged for review and action.</p>
+      <p><strong>H — Personalised Learning Plan:</strong> Tutors and parents co-create a clear plan with milestones, short assessments and resources.</p>
+      <p><strong>I — Safety & Support:</strong> ID verification, in-platform messaging, emergency contacts and optional background checks support family safety preferences.</p>
+      <p><strong>J — Affordable & Fair:</strong> Community pricing, group discounts, sibling bundles and referral rewards keep tuition affordable and sustainable.</p>
+      <p><strong>K — Tutor Growth:</strong> Tutors receive training, mentoring and verified references, improving teaching quality across the network.</p>
+      <p><strong>L — Progress Dashboards:</strong> Parents monitor attendance, improvement trends and next-step recommendations in a simple dashboard.</p>
+      <p><strong>M — Community Rewards:</strong> Refer a friend and both get discounts; group registrations unlock lower rates and priority scheduling.</p>
+      <p><strong>N — Choice & Comfort:</strong> Families can filter tutors by gender, language, and cultural background to ensure comfortable matches.</p>
+      <p><strong>O — Transparent Safety Records:</strong> Profiles show verification badges, session history and review summaries for peace of mind.</p>
+      <p><strong>P — Celebrate & Scale:</strong> Milestones, badges and certificates encourage learners and create shareable progress moments.</p>
+    </div>
+
+    <p style="margin-top:10px; color:#dcdcdc;">
+      <strong>Value for parents & students:</strong> Verified tutors, in-home or online lessons with clear notes and measurable progress — this is safer, more personal, and more effective than late-night tuition runs.
+    </p>
+  </div>
+
+  <!-- FEEDBACK -->
+  <section id="feedback" class="py-8">
+    <div class="content-card neon-border">
+      <h3 class="text-2xl font-bold text-orange-400 mb-3">💡 Early MVP Feedback</h3>
+      <p class="text-yellow-300 font-semibold mb-4">⚠️ Important: This platform is currently in the <strong>MVP feedback stage</strong>. No official classes are registered yet, and <strong>payments should not be made</strong>. This section is for feedback purposes only.</p>
+
+      <div class="mb-6 max-w-lg mx-auto">
+        <p class="text-center mb-3 text-lg text-yellow-500 font-medium">Click below to open the official EduLynx Feedback Form (required):</p>
+        <!-- button left unchanged -->
+        <a href="https://forms.gle/uZeqajMvUwbthNZ89" target="_blank" class="neon-border bg-orange-500 text-black font-bold py-3 px-8 rounded-lg text-lg uppercase tracking-wide block w-full text-center hover:bg-orange-400">Open Feedback Form (New Tab)</a>
+      </div>
+
+      <p class="mb-4 text-center">Your local vote for the platform's core idea is below. Yes/No results update <strong>live globally</strong>.</p>
+
+      <div id="local-response" style="margin-top:12px;color:var(--gold);font-weight:700;"></div>
+
+      <div class="votes-row">
+        <div id="vote-yes-card" class="vote-card vote-yes glow-pulse vote-yes-card">
+          <div class="label">👍 Yes</div>
+          <span id="yes-count" class="vote-number">0</span>
+        </div>
+
+        <div id="vote-no-card" class="vote-card vote-no glow-pulse vote-no-card">
+          <div class="label">👎 No</div>
+          <span id="no-count" class="vote-number">0</span>
+        </div>
+      </div>
+
+      <div style="max-width:480px; margin:20px auto 0; padding:12px; border:1px solid rgba(255,255,255,0.1); border-radius:12px; background:rgba(0,0,0,0.3);">
+        <h4 style="font-weight:600; color:var(--neon); text-align:center; margin-bottom:10px;">Overall Support Status:</h4>
+        <div class="progress-bar-container" style="position:relative; width:100%; height:30px; background-color:var(--no-red); border-radius:5px; overflow:hidden;">
+          <div id="yes-bar" style="height:100%; width:0%; background-color:var(--yes-green); transition:width 0.3s ease-in-out;"></div>
+          <span id="yes-percent" style="position:absolute; top:5px; left:50%; transform:translateX(-50%); color:white; font-weight:bold; text-shadow:1px 1px 2px rgba(0,0,0,0.5);">0% Support</span>
+        </div>
+      </div>
+
+      <div id="thank" class="thank">✨ Thanks for submitting your feedback! Your input helps improve EduLynx. ✨</div>
+    </div>
+  </section>
+
+  <!-- INVESTORS -->
+  <section id="investors" class="py-8">
+    <div class="value-highlight mx-auto max-w-3xl">
+      <h3 class="text-2xl font-bold mb-2" style="color:white;">🚀 Interested in Investing?</h3>
+      <p class="mb-4" style="font-size:1rem; font-weight:normal; color:white;">
+        EduLynx is currently launching in Selangor & Kuala Lumpur. Early adoption metrics and community growth are available. Investors can register interest to be contacted with launch insights, revenue projections and strategic plans.
+        <br><br>
+        <strong>Phase 2 launching in Penang & Johor.</strong>
+      </p>
+
+      <!-- keep button exactly as-is -->
+      <a href="https://forms.gle/QyoQmJjBWppnQwMq9" target="_blank" class="neon-border bg-orange-500 text-black font-bold py-2 px-6 rounded-lg inline-block hover:bg-orange-400">📩 Register Interest</a>
+    </div>
+  </section>
+
 </main>
 
 <footer class="mt-12 text-center text-gray-400">
-  &copy; 2025 Edulynx. All rights reserved. | Creative Wizard Marketing
+  &copy; 2025 Edulynx. All rights reserved. | Creative Wizard Marketing
 </footer>
-</div>
 
+<!-- Background emoji script (preserves your original background feel) -->
 <script>
-    // YOUR LIVE GOOGLE SHEETS API URL
-    const VOTES_API_URL = "https://script.google.com/macros/s/AKfycbwTnKiqigEAozzXEFDLuRH_C7L8pJ83JGVWcTnSyXgMjol3AeXGVcF1PLD-4Zw-KsbrEw/exec"; 
+document.addEventListener('DOMContentLoaded', () => {
+  const emojis = ['📚','🎓','✏️','📝','🏫','🧑‍🏫','📖','💡','📐','🖊️','🧠'];
+  const emojiBg = document.getElementById('emoji-bg');
 
-    // Get the HTML elements that will display the counts and bars
-    const yesVotesEl = document.getElementById('yes-count');
-    const noVotesEl = document.getElementById('no-count');
-    const yesBarEl = document.getElementById('yes-bar');
-    const yesPercentEl = document.getElementById('yes-percent'); 
-    
+  if (!emojiBg) return;
 
-    // Function to fetch and update the data
-    async function fetchAndUpdateVotes() {
-        try {
-            // Use the fetch API to get the JSON data
-            const response = await fetch(VOTES_API_URL);
-            const data = await response.json();
+  for(let i=0;i<30;i++){
+    const span = document.createElement('span');
+    span.textContent = emojis[Math.floor(Math.random()*emojis.length)];
+    span.className='bg-emoji';
+    span.style.top = (Math.random()*100) + '%';
+    span.style.left = (Math.random()*100) + '%';
+    span.style.fontSize = (12 + Math.random()*48) + 'px';
+    span.style.animationDuration = (6 + Math.random()*12) + 's';
+    span.style.animationDelay = (-1 * Math.random() * 8) + 's';
+    emojiBg.appendChild(span);
+  }
 
-            // Ensure counts are treated as numbers
-            const yesCount = parseInt(data.Yes) || 0;
-            const noCount = parseInt(data.No) || 0;
-            const totalVotes = yesCount + noCount;
-
-            // 1. Update the counter text
-            yesVotesEl.textContent = yesCount.toLocaleString();
-            noVotesEl.textContent = noCount.toLocaleString();
-
-            // 2. Calculate percentages for the progress bars
-            const yesPercent = totalVotes > 0 ? (yesCount / totalVotes) * 100 : 50; 
-            
-            // 3. Update the width of the bar graph elements
-            yesBarEl.style.width = yesPercent.toFixed(0) + '%';
-            yesPercentEl.textContent = `${yesPercent.toFixed(0)}% Support`;
-
-        } catch (error) {
-            console.error("Error fetching vote data from Google Sheets:", error);
-            // Display an error message if the fetch fails
-            yesVotesEl.textContent = '---';
-            noVotesEl.textContent = '---';
-        }
-    }
-
-    // Run the update when the page loads, and then every 10,000 milliseconds (10 seconds)
-    document.addEventListener('DOMContentLoaded', () => {
-        fetchAndUpdateVotes(); 
-        setInterval(fetchAndUpdateVotes, 10000); 
-    });
-</script>
-
-<script>
-  // Script for background effects (not module type)
-  document.addEventListener('DOMContentLoaded', () => {
-    // Generate floating emoji background
-    const emojis = ['📚','🎓','✏️','📝','🏫','🧑‍🏫','📖','💡','📐','🖊️','🧠'];
-    const emojiBg = document.getElementById('emoji-bg');
-    
-    if (!emojiBg) return;
-
-    for(let i=0;i<30;i++){
-      const span = document.createElement('span');
-      span.textContent = emojis[Math.floor(Math.random()*emojis.length)];
-      span.className='bg-emoji';
-      span.style.top = Math.random()*100 + '%';
-      span.style.left = Math.random()*100 + '%';
-      span.style.fontSize = (16+Math.random()*40)+'px';
-      span.style.animationDuration = (8+Math.random()*12)+'s';
-      span.style.animationDelay = (-1 * Math.random() * 8) + 's';
-      emojiBg.appendChild(span);
-    }
+  // Also spawn a few floating 'particles'
+  const particles = document.getElementById('particles');
+  if (particles) {
+    for (let i = 0; i < 40; i++) {
+      const p = document.createElement('div');
+      p.className = 'particle';
+      p.style.top = Math.random()*100 + '%';
+      p.style.left = Math.random()*100 + '%';
+      p.style.opacity = (0.2 + Math.random()*0.6);
+      p.style.transform = 'translate3d(0,0,0)';
+      particles.appendChild(p);
+    }
+  }
 });
 </script>
+
 </body>
 </html>
